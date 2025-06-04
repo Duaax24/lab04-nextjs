@@ -15,12 +15,15 @@ services:
 
   application:
     container_name: foodfinder-application
-    image: node:lts-alpine
-    working_dir: /home/node/app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
     ports:
       - "3000:3000"
     volumes:
-      - ./foodfinder-application:/home/node/app
+      - .:/app
+      - /app/node_modules
     depends_on:
       - backend
     environment:
@@ -28,8 +31,6 @@ services:
       CHOKIDAR_USEPOLLING: "true"
       CHOKIDAR_INTERVAL: "100"
     command: "npm run dev"
-    tty: true
-    user: "${MY_USER}"
 
 volumes:
   mongodb_data_container:
